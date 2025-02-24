@@ -14,6 +14,7 @@ export type EquipmentResponse = {
   equipmentModelId: string,
   id: string,
   name: string,
+  icon?: string,
   model?: EquipmentModel,
   position?: Position,
   state?: EquipmentState

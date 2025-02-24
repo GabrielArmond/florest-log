@@ -1,6 +1,5 @@
 type SnackbarType = 'success' | 'warning' | 'error' | 'info'
 
-
 export const useSnackbarStore = defineStore("snackbar", {
   state: () => ({
     show: false,
@@ -9,7 +8,7 @@ export const useSnackbarStore = defineStore("snackbar", {
     timeout: 3000
   }),
   actions: {
-    openSnackbar(message: string, color: "success" | "error" | "info" | "warning" = "success", timeout: number = 3000) {
+    openSnackbar(message: string, color: SnackbarType, timeout: number = 2000) {
       this.message = message;
       this.color = color;
       this.timeout = timeout;

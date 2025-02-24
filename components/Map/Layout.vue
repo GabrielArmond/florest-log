@@ -11,7 +11,8 @@
           <LMarker v-for="(eqp, index) in equipments" :key="index"
             :lat-lng="[eqp.position?.lat || 0, eqp.position?.lon || 0]" @click="openEquipmentsDetails(eqp)">
             <LIcon>
-              <Icon name="material-symbols-light:location-on" size="2rem" :style="`color: ${eqp.state?.color}`" />
+              <Icon :name="eqp.icon || 'material-symbols-light:location-on'" size="2rem"
+                :style="`color: ${eqp.state?.color}`" />
             </LIcon>
             <LTooltip>
               <div class="d-flex flex-column justify-center ga-1 inter">
@@ -47,7 +48,6 @@ import type { EquipmentResponse } from '@dtos/Equipment';
 interface Props {
   equipments: EquipmentResponse[]
 }
-
 const props = defineProps<Props>()
 
 const emit = defineEmits(['openEquipmentsDetails'])
