@@ -8,7 +8,7 @@ export const useSnackbarStore = defineStore("snackbar", {
     timeout: 3000
   }),
   actions: {
-    openSnackbar(message: string, color: SnackbarType, timeout: number = 2000) {
+    openSnackbar(message: string, color: SnackbarType, timeout: number = 3000) {
       this.message = message;
       this.color = color;
       this.timeout = timeout;

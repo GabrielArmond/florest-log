@@ -9,7 +9,8 @@
             layer-type="base" name="OpenStreetMap" />
 
           <LMarker v-for="(eqp, index) in equipments" :key="index"
-            :lat-lng="[eqp.position?.lat || 0, eqp.position?.lon || 0]" @click="openEquipmentsDetails(eqp)">
+            :lat-lng="[eqp.position?.lat || defaultLat, eqp.position?.lon || defaultLon]"
+            @click="openEquipmentsDetails(eqp)">
             <LIcon>
               <Icon :name="eqp.icon || 'material-symbols-light:location-on'" size="2rem"
                 :style="`color: ${eqp.state?.color}`" />
@@ -18,11 +19,11 @@
               <div class="d-flex flex-column justify-center ga-1 inter">
                 <p class="equipment">
                   <span class="equipmentKey">Nome:</span> <span>{{ eqp.name
-                    }}</span>
+                  }}</span>
                 </p>
                 <p class="equipment"><span class="equipmentKey">Modelo:</span> {{ eqp.model?.name }}</p>
                 <p class="equipment"><span class="equipmentKey">Data:</span> {{ formatIsoToBrDate(eqp.position?.date)
-                  }}</p>
+                }}</p>
                 <div class="equipment d-flex align-center justify-start ga-2">
                   <span class="equipmentKey">Status: </span>
                   <span class="d-flex align-center ga-1 font-weight-bold">
@@ -52,9 +53,10 @@ const props = defineProps<Props>()
 
 const emit = defineEmits(['openEquipmentsDetails'])
 
+const defaultLat = -9.54444 // Latitude Apiácas ponto central do Brasil
+const defaultLon = -57.4511 // Longitude Apiácas ponto central do Brasil
+
 const center = computed(() => {
-  const defaultLat = -9.54444 // Latitude Apiácas ponto central do Brasil
-  const defaultLon = -57.4511 // Longitude Apiácas ponto central do Brasil
   if (!props.equipments) {
     return { lat: defaultLat, lon: defaultLon }
   }

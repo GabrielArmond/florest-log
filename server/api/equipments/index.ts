@@ -1,9 +1,10 @@
 import { EquipmentFactory } from "@factories/EquipmentFactory";
 import type { EquipmentResponse } from "@dtos/Equipment";
 
-export default defineEventHandler(async (): Promise<EquipmentResponse[]> => {
+export default defineEventHandler(async (event): Promise<EquipmentResponse[]> => {
   const equipmentProvider = EquipmentFactory.createService()
-
+  const query = getQuery(event)
+  const stateFilter = query.state
   try {
     const equipments = await equipmentProvider.getEquipments()
     const equipmentsModel = await equipmentProvider.getEquipmentsModel()
@@ -27,7 +28,9 @@ export default defineEventHandler(async (): Promise<EquipmentResponse[]> => {
         state,
         position
       }
-    })
+    }).filter((equipment) => {
+      return stateFilter ? equipment.state?.id === stateFilter : true;
+    });
 
     return lastEquipments
   } catch (error) {

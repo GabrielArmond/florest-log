@@ -1,10 +1,11 @@
 <template>
   <section class="flex-column align-start justify-center w-100 inter">
-    <Map :equipments="equipments || []" @open-equipments-details="showDialogEquipmentDetails" />
+    <Map :equipment-states="equipmentStates || []" :equipments="equipmentStore.equipments || []"
+      @open-equipments-details="showDialogEquipmentDetails" @filter-equipments="filterEquipments" />
     <div class="d-flex align-center justify-center flex-wrap ga-2 my-5 mx-2 w-100">
-      <MapCaption v-for="(eqp, index) in equipments" :key="index" :equipment-name="eqp.name"
+      <MapCaption v-for="(eqp, index) in equipmentStore.equipments" :key="index" :equipment-name="eqp.name"
         :icon="eqp.icon || 'material-symbols-light:location-on'"
-        :is-last="equipments && equipments.length - 1 === index" />
+        :is-last="equipmentStore.equipments && equipmentStore.equipments.length - 1 === index" />
     </div>
   </section>
   <DialogDetails :equipment-id="equipmentStore.equipmentSelected?.id"
@@ -19,6 +20,7 @@ import type { EquipmentResponse } from '@dtos/Equipment';
 import { useEquipmentsStore } from '@composables/stores/useEquipmentsStore';
 import { useShowDialogEquipmentDetails } from '@composables/utilities/store';
 import { useSnackbarStore } from '@composables/utilities/useSnackbar';
+import type { EquipmentsState } from '@dtos/EquipmentState';
 
 definePageMeta({
   layout: 'landing'
@@ -30,14 +32,12 @@ const snackBarStore = useSnackbarStore()
 
 const { data: equipments } = await useFetch<EquipmentResponse[]>('/api/equipments')
 
+const { data: equipmentStates } = await useFetch<EquipmentsState[]>('/api/equipments/states')
+
 if (equipments.value) {
-  equipmentStore.equipments = equipments.value
-  equipments.value = equipments.value.map(eqp => {
-    return {
-      ...eqp,
-      icon: equipmentIcons[removeHyphen(eqp.name)] ?? 'material-symbols-light:location-on'
-    }
-  })
+  const equipmentsWithIcons = setIconsInEquipments(equipments.value)
+
+  equipmentStore.equipments = equipmentsWithIcons
 }
 
 async function showDialogEquipmentDetails(eqp: EquipmentResponse) {
@@ -59,13 +59,35 @@ async function showDialogEquipmentDetails(eqp: EquipmentResponse) {
   }
 }
 
+async function filterEquipments(value: string) {
+  const data = await $fetch<EquipmentResponse[]>(`/api/equipments?state=${value}`)
+  if (data) {
+    const equipmentsWithIcons = setIconsInEquipments(data)
+    equipmentStore.equipments = equipmentsWithIcons
+    if (equipmentStore.equipments.length <= 0) {
+      snackBarStore.openSnackbar('Nenhum equipamento encontrado, tente outro filtro', 'warning')
+    }
+  } else {
+    snackBarStore.openSnackbar('Erro ao buscar equipamentos filtrados', 'error')
+  }
+}
+
+function setIconsInEquipments(equipments: EquipmentResponse[]) {
+  const equipmentsMapped = equipments = equipments.map(eqp => {
+    return {
+      ...eqp,
+      icon: equipmentIcons[removeHyphen(eqp.name)] ?? 'material-symbols-light:location-on'
+    }
+  })
+
+  return equipmentsMapped
+}
+
 onMounted(() => {
   if (equipments.value) {
     snackBarStore.openSnackbar('Equipamentos buscados com sucesso.', 'success')
   }
 })
-
-
 </script>
 
 <style>
