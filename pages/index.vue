@@ -4,32 +4,48 @@
   </section>
   <DialogDetails :equipment-id="equipmentStore.equipmentSelected?.id"
     :equipment-name="equipmentStore.equipmentSelected?.name"
-    :equipment-state-history="equipmentStore.equipmentStateHistorySelected" />
+    :equipment-current-state="equipmentStore.equipmentSelected?.state"
+    :equipment-state-history="equipmentStore.equipmentStateHistorySelected"
+    :equipments-states="equipmentStore.equipmentsStates" />
 </template>
 
 <script setup lang="ts">
 import type { EquipmentResponse } from '@dtos/Equipment';
 import { useEquipmentsStore } from '@composables/stores/useEquipmentsStore';
 import { useShowDialogEquipmentDetails } from '@composables/utilities/store';
+import { useSnackbarStore } from '@composables/utilities/useSnackbar';
 
 definePageMeta({
   layout: 'landing'
 })
 
-const { data: equipments } = await useFetch<EquipmentResponse[]>('/api/equipments')
 const equipmentStore = useEquipmentsStore()
 const showDialogEquipmentDetail = useShowDialogEquipmentDetails()
+const snackBarStore = useSnackbarStore()
 
+const { data: equipments } = await useFetch<EquipmentResponse[]>('/api/equipments')
 if (equipments.value) {
   equipmentStore.equipments = equipments.value
+  snackBarStore.openSnackbar('Equipamentos buscados com sucesso.', 'success')
 }
 
 async function showDialogEquipmentDetails(eqp: EquipmentResponse) {
-  const data = await $fetch(`/api/equipments/state-history/${eqp.id}`)
+  const equipmentStateHistory = await $fetch(`/api/equipments/state-history/${eqp.id}`)
+  const equipmentsStates = await $fetch('/api/equipments/states')
+
   equipmentStore.equipmentSelected = eqp
-  equipmentStore.equipmentStateHistorySelected = data
-  console.log('equipmentStateHistorySelected', { data, eqp: equipmentStore.equipmentStateHistorySelected })
-  showDialogEquipmentDetail.value = true
+
+  equipmentStore.equipmentStateHistorySelected = equipmentStateHistory
+
+
+  equipmentStore.equipmentsStates = equipmentsStates
+
+
+  if (equipmentsStates && equipmentStateHistory && equipmentStore.equipmentSelected) {
+    showDialogEquipmentDetail.value = true
+  } else {
+    snackBarStore.openSnackbar(`Erro ao carregar mais detalhes do equipamento: ${eqp.id}`, 'error')
+  }
 }
 
 

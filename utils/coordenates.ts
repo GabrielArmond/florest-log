@@ -14,6 +14,6 @@ export function getCenter(equipmentsPosition: Position[]) {
 
   return {
     lat: sum.lat / equipmentsPosition.length,
-    lon: sum.lon / equipmentsPosition.length,
+    lon: sum.lon / equipmentsPosition.length
   };
 };

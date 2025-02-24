@@ -12,7 +12,7 @@
           <span class="text-h5 inter font-weight-bold">ForestLog</span>
         </v-list-item>
         <v-divider class="my-2"></v-divider>
-        <v-list-item link title="Mapa" active></v-list-item>
+        <v-list-item link title="Posições dos equipamentos" active></v-list-item>
       </v-list>
     </v-navigation-drawer>
 

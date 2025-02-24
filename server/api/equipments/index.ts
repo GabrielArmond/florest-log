@@ -1,8 +1,7 @@
 import { EquipmentFactory } from "@factories/EquipmentFactory";
-import { EquipmentResponse } from "@dtos/Equipment";
-import { showSnackbar } from "~/composables/utilities/useSnackbar";
+import type { EquipmentResponse } from "@dtos/Equipment";
 
-export default defineEventHandler(async (event): Promise<EquipmentResponse[]> => {
+export default defineEventHandler(async (): Promise<EquipmentResponse[]> => {
   const equipmentProvider = EquipmentFactory.createService()
 
   try {
@@ -30,10 +29,8 @@ export default defineEventHandler(async (event): Promise<EquipmentResponse[]> =>
       }
     })
 
-    showSnackbar('success', 'Equipamentos encontrados com sucesso.')
     return lastEquipments
   } catch (error) {
-    showSnackbar('error', 'Erro ao buscar equipamentos.')
-    throw new Error('Error on get Equipments')
+    throw new Error(`Error on get Equipments: ${error}`)
   }
 });

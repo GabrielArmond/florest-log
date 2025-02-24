@@ -1,6 +1,6 @@
-import { EquipmentModel } from "./EquipmentModel"
-import { Position } from "./EquipmentPositionHistory"
-import { EquipmentState } from "./EquipmentState"
+import type { EquipmentModel } from "./EquipmentModel"
+import type { Position } from "./EquipmentPositionHistory"
+import type { EquipmentState } from "./EquipmentState"
 
 export interface Equipment {
   id: string,

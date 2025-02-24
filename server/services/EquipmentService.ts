@@ -1,11 +1,10 @@
-import { IEquipmentService } from "@domain/IEquipmentService";
-import { Equipments } from "@dtos/Equipment";
-import { EquipmentsModel } from "@dtos/EquipmentModel";
-import { EquipmentsPositionHistory } from "@dtos/EquipmentPositionHistory";
-import { EquipmentsState } from "@dtos/EquipmentState";
-import { EquipmentsStateHistory, EquipmentStateHistory } from "@dtos/EquipmentStateHistory";
+import type { IEquipmentService } from "@domain/IEquipmentService";
+import type { Equipments } from "@dtos/Equipment";
+import type { EquipmentsModel } from "@dtos/EquipmentModel";
+import type { EquipmentsPositionHistory } from "@dtos/EquipmentPositionHistory";
+import type { EquipmentsState } from "@dtos/EquipmentState";
+import type { EquipmentsStateHistory, EquipmentStateHistory } from "@dtos/EquipmentStateHistory";
 import { readJsonFile } from "../utils/readJsonFile";
-import { showSnackbar } from "~/composables/utilities/useSnackbar";
 
 export class EquipmentService implements IEquipmentService {
   async getEquipments(): Promise<Equipments> {
@@ -76,7 +75,6 @@ export class EquipmentService implements IEquipmentService {
       const equipmentSelected = equipmentsStateHistoryResponse.find(eqp => eqp.equipmentId === id)
 
       if (!equipmentSelected) {
-        showSnackbar('error', 'Erro ao buscar equipamento selecionado.')
         throw new Error('Get Equipment State History By Id')
       }
 
