@@ -54,7 +54,7 @@
                         Ganho:
                         <span class="stateValue font-weight-bold" :style="`color: ${state.color};`">{{
                           formatMoney(state.earning || 0)
-                          }}/hora</span>
+                        }}/hora</span>
                       </span>
                     </div>
                   </v-card>
@@ -134,6 +134,7 @@ const equipmentStatesPagination = computed<EquipmentStatesPagination[]>(() => {
         earning: earning?.value
       };
     })
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, currentPage.value * itemsPerPage);
 });
 
