@@ -2,7 +2,7 @@
   <div class="text-center pa-4 inter">
     <v-dialog v-model="showDialog" width="800" height="600">
       <v-card>
-        <v-card-title class="d-flex align-center justify-space-between ga-2">
+        <v-card-title class="d-flex align-center justify-space-between ga-2 inter">
           <div class="d-flex align-center ga-1">
             <Icon name="mdi:information-slab-box" size="1.5rem" style="color: #003184" />
             <span class="font-weight-regular">
@@ -13,22 +13,29 @@
           </div>
         </v-card-title>
         <v-card-text>
-          <div class="d-flex align-center justify-start ga-1">
+          <div class="d-flex align-center justify-start ga-1 inter">
             Status atual:
             <span class="d-flex align-center ga-1 font-weight-bold">
               <Icon name="material-symbols-light:circle" :style="`color: ${equipmentCurrentState?.color}`" /><span>{{
                 equipmentCurrentState?.name }}</span>
             </span>
           </div>
-          <div class="d-flex align-center justify-start ga-1">
-            Ganho atual:
+          <div class="d-flex align-center justify-start ga-1 inter">
+            Ganhos totais:
             <span class="d-flex align-center ga-1 font-weight-bold">
-              {{ totalCurrentEarning }}
+              {{ totalEarning }}
+            </span>
+          </div>
+          <div class="d-flex align-center justify-start ga-1 inter">
+            Horas por estado:
+            <span v-for="(state, index) in workingHoursPerState" :key="index">
+              <span :style="`color: ${state.color}`">{{ state.name }}:</span> <span>{{ state.duration }}</span> <span
+                v-if="!(workingHoursPerState.length - 1 === index)">/</span>
             </span>
           </div>
           <ClientOnly>
-            <v-infinite-scroll :height="400" :items="equipmentStatesPagination" :onLoad="load" mode="manual"
-              load-more-text="Carregar mais">
+            <v-infinite-scroll :height="350" :items="equipmentStatesPagination" :onLoad="load" mode="manual"
+              load-more-text="Carregar mais" class="my-4">
               <template v-for="(state, index) in equipmentStatesPagination" :key="index">
                 <div class="d-flex flex-column align-center justify-center mr-2">
                   <v-card class="my-1 w-100 pa-3" variant="tonal" rounded="md">
@@ -47,7 +54,7 @@
                         Ganho:
                         <span class="stateValue font-weight-bold" :style="`color: ${state.color};`">{{
                           formatMoney(state.earning || 0)
-                        }}/hora</span>
+                          }}/hora</span>
                       </span>
                     </div>
                   </v-card>
@@ -88,6 +95,12 @@ type EquipmentStatesPagination = {
   earning?: number
 }
 
+type WorkingHoursPerState = {
+  name: string;
+  color: string;
+  duration: string;
+}
+
 const { equipmentStateHistory, equipmentsStates, equipmentModel } = defineProps<Props>()
 
 const showDialog = useShowDialogEquipmentDetails()
@@ -124,39 +137,30 @@ const equipmentStatesPagination = computed<EquipmentStatesPagination[]>(() => {
     .slice(0, currentPage.value * itemsPerPage);
 });
 
-const totalCurrentEarning = computed(() => {
+
+const totalEarning = computed(() => {
   if (
     !equipmentStateHistory ||
-    !equipmentStateHistory.states ||
     !equipmentModel
   ) {
     return [];
   }
 
-  const equipmentsAnalyzed = equipmentStateHistory.states.map((stateHistory) => {
-    const state = equipmentsStates?.find(
-      (state) => state.id === stateHistory.equipmentStateId
-    );
+  const stateDurations = calculateTimePerState(equipmentStateHistory);
+  const totalEarnings = calculateTotalEarnings(stateDurations, equipmentModel);
 
-    const earning = equipmentModel.hourlyEarnings.find(model => model.equipmentStateId === state?.id)
+  return formatMoney(totalEarnings)
+})
 
-    return {
-      ...state,
-      earning
-    }
-  })
+const workingHoursPerState = computed<WorkingHoursPerState[]>(() => {
+  if (!equipmentStateHistory || !equipmentsStates) {
+    return [];
+  }
 
-  const calculateTime = calculateTimePerState(equipmentStateHistory)
+  const stateDurations = calculateTimePerState(equipmentStateHistory);
+  const formattedDurations = displayStateDurations(stateDurations, equipmentsStates);
 
-  const initialValue = 0
-  const total = equipmentsAnalyzed.reduce(
-    (accumulator, state) => {
-      return accumulator + ((state?.id && state.earning?.value && state.earning?.value * calculateTime[state.id]) || 0)
-    },
-    initialValue
-  )
-
-  return formatMoney(total)
+  return formattedDurations
 })
 
 const totalPages = computed(() => {

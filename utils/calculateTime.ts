@@ -1,4 +1,5 @@
 import type { EquipmentStateHistory } from "@dtos/EquipmentStateHistory";
+import type { EquipmentsState } from "@dtos/EquipmentState";
 
 export const calculateTimePerState = (equipmentHistory: EquipmentStateHistory) => {
   const stateDurations: Record<string, number> = {};
@@ -22,4 +23,15 @@ export const calculateTimePerState = (equipmentHistory: EquipmentStateHistory) =
   }
 
   return stateDurations;
+};
+
+export const displayStateDurations = (stateDurations: Record<string, number>, equipmentsState: EquipmentsState) => {
+  return Object.entries(stateDurations).map(([stateId, duration]) => {
+    const state = equipmentsState.find((s) => s.id === stateId);
+    return {
+      name: state?.name || "Desconhecido",
+      color: state?.color || "#000",
+      duration: duration + " horas"
+    };
+  });
 };
