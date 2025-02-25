@@ -10,6 +10,18 @@ Além disso foi utilizado o Pinia para gerenciamento de estado.
 
 Foi implementado o linter para formatação e padronização do código.
 
+## Considerações Projeto
+Como funcionalide foi implementado:
+-> **Mapa interativo** para visualização das últimas posições dos equipamentos.
+-> **Ícones e cores** para identificação qual é o equipamento e seu estado atual.
+-> **Mouse hover** para visualizar informações básicas do equipamento: **Nome, Modelo, Data, Status**
+-> Dialog de detalhes do equipamento **escolhido no mapa**. Neste modal é mostrado mais informações como: **Nome, Status atual, Ganhos totais, Horas por estado e histórico de estados do equipamento.**
+-> No Dialog de detalhes foi feito o **Infinite Scroller** para melhor visualização do histórico de detalhes, sendo mostrado 10 inicialmente e sempre que carregado mais itens é mostrado mais 10.
+-> **Legenda** abaixo do mapa para entender qual equipamento se refere o ícone mostrado no mapa.
+-> **Filtro** por estado do equipamento funcional: Todos, Operando, Parado ou Manutenção
+-> **Centralização** da visão do mapa para a localização dos equipamentos.
+-> Arquitetura baseada na **Clean Architecture** para separar as camadas bem definidas e garantir fácil manutenção e escalabilidade.
+
 ## Estrutura do Projeto
 ```
 ├── components/      # Componentes Vue reutilizáveis
@@ -31,7 +43,7 @@ Foi implementado o linter para formatação e padronização do código.
 1. Instale as dependências:
   ```sh
    npm install
-   #ou
+   # ou
    yarn install
   ```
 2. Inicie o servidor de desenvolvimento:
@@ -49,6 +61,11 @@ npm run build
 Para rodar o projeto em modo de produção:
 ```sh
 npm run start
+```
+## Visualização do build
+Inicie o servidor:
+```sh
+npm run preview
 ```
 
 ## Detalhes do Nuxt
