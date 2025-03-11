@@ -11,7 +11,7 @@
 
 useHead({
   meta: [{ hid: 'robots', name: 'robots', content: 'noindex' }], // no search engine indexing,
-  title: 'ForestLog - Aiko'
+  title: 'ForestLog'
 })
 </script>
 
