@@ -4,6 +4,9 @@ import { resolve } from 'path'
 import { fileURLToPath } from 'url'
 
 export default defineNuxtConfig({
+  app: {
+    baseURL: process.env.NUXT_APP_BASE_URL || '/'
+  },
   ssr: false,
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
