@@ -10,7 +10,7 @@ export default defineNuxtConfig({
   nitro: {
     preset: "static",
     prerender: {
-      routes: ["/"],
+      routes: ["/", "/api/equipments", "/api/equipments/states"],
     }
   },
   ssr: false,
