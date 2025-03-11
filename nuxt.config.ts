@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url'
 
 export default defineNuxtConfig({
   app: {
-    baseURL: '/florest-log/'
+    baseURL: '/'
   },
   nitro: {
     preset: 'vercel',
