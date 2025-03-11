@@ -32,7 +32,7 @@ jobs:
     # Deploy to the github_pages environment
     environment:
       name: github_pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.base_url }}
     # Specify runner + deployment step
     runs-on: ubuntu-latest
     steps:
