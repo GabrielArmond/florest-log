@@ -1,4 +1,4 @@
-# Teste Frontend V4
+# Florest Log - App de monitoramento de máquinas florestais
 
 ## Visão Geral
 
