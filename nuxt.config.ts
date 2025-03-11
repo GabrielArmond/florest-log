@@ -8,10 +8,7 @@ export default defineNuxtConfig({
     baseURL: '/florest-log/'
   },
   nitro: {
-    preset: "static",
-    prerender: {
-      routes: ["/", "/api/equipments", "/api/equipments/states"],
-    }
+    preset: 'vercel',
   },
   ssr: false,
   compatibilityDate: '2024-11-01',
