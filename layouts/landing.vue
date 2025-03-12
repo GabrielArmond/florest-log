@@ -2,7 +2,7 @@
   <v-layout class="rounded rounded-md">
     <v-app-bar>
       <div class="d-flex align-center justify-start">
-        <v-img class="ml-3" :width="100" src="public/img/aiko.png" />
+        <!-- <v-img class="ml-3" :width="100" src="public/img/aiko.png" /> -->
       </div>
     </v-app-bar>
 
