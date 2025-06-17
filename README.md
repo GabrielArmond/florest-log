@@ -67,6 +67,9 @@ Como funcionalide foi implementado:
    # ou
    yarn dev
   ```
+3. Teste o projeto:
+
+    [**Florest Log**](https://florest-log.vercel.app/)
 
 ## Build e Deploy
 Para gerar a versão de produção:
